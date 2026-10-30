@@ -1,1 +1,8 @@
-
+{
+    "Monday": "Tiết 1: HĐTNHN\nTiết 2: QP và an ninh\nTiết 3: Ngữ văn\nTiết 4: Toán\nTiết 5: Toán",
+    "Tuesday": "Tiết 1: Ngoại ngữ\nTiết 2: Ngoại ngữ\nTiết 3: GDKT & PL\nTiết 4: Ngữ văn\nTiết 5: Sinh học",
+    "Wednesday": "Tiết 1: Lịch sử\nTiết 2: Địa lý\nTiết 3: GD địa phương\nTiết 4: Toán\nTiết 5: HĐTNHN",
+    "Thursday": "Tiết 1: Ngoại ngữ\nTiết 2: GD thể chất\nTiết 3: Địa lý\nTiết 4: Sinh học\nTiết 5: GDKT & PL",
+    "Friday": "Tiết 1: CN công nghiệp\nTiết 2: Ngữ văn\nTiết 3: Ngữ văn\nTiết 4: GDKT & PL",
+    "Saturday": "Tiết 1: Toán\nTiết 2: GD thể chất\nTiết 3: Lịch sử\nTiết 4: CN công nghiệp\nTiết 5: HĐTNHN"
+}
