@@ -1,10 +1,16 @@
-try { require('dotenv').config(); } catch (e) {}
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
+import fs from 'fs';
+import http from 'http';
+import https from 'https';
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import { GoogleGenAI } from '@google/genai';
 import cron from 'node-cron';
+
+try {
+    if (process.env.NODE_ENV !== 'production') {
+        const dotenv = await import('dotenv');
+        dotenv.config();
+    }
+} catch (e) {}
 
 // ==========================================
 // 1. CƠ CHẾ CHỐNG NGỦ (KEEP-ALIVE CHO RENDER)
@@ -30,7 +36,7 @@ if (EXTERNAL_URL) {
     console.log(`[-] Lưu ý: Không tìm thấy RENDER_EXTERNAL_URL (chỉ chạy nội bộ).`);
 }
 
-// Tự động ping mỗi 3 phút (180000 ms) chống ngủ
+// Tự động ping mỗi 3 phút chống ngủ
 setInterval(() => {
     http.get(`http://127.0.0.1:${PORT}/health`, () => {}).on('error', () => {});
     if (EXTERNAL_URL) {
@@ -179,7 +185,8 @@ async function analyzeTkbWithAI(imageUrl) {
         ]
     });
 
-    const cleanText = aiResponse.text.replace(/```json/g, '').replace(/```/g, '').trim();
+    const cleanText = aiResponse.text.replace(/
+```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(cleanText);
 }
 
