@@ -199,10 +199,14 @@ client.once('ready', () => {
     setupCronJobs();
 });
 
-// Xử lý tin nhắn chat (Ảnh TKB hoặc lệnh jt2-jt7)
+// Xử lý tin nhắn (CHỈ NHẬN TRONG TIN NHẮN RIÊNG - DM)
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
 
+    // Chặn tất cả tin nhắn xuất phát từ server chung, chỉ cho phép DM
+    if (message.guild) return;
+
+    // 1. NẾU GỬI ẢNH TRONG DM: Phân tích bằng AI và lưu trữ
     if (message.attachments.size > 0) {
         const attachment = message.attachments.first();
         const isImage = attachment.contentType?.startsWith('image/');
@@ -223,6 +227,7 @@ client.on('messageCreate', async (message) => {
         return;
     }
 
+    // 2. NẾU GỬI LỆNH TRONG DM (jt2, jt3, jt4, jt5, jt6, jt7)
     const content = message.content.trim().toLowerCase();
     const mapCmdToDay = {
         "jt2": { key: "Monday", name: "Thứ 2" },
@@ -290,7 +295,7 @@ function setupCronJobs() {
         }
     }, { timezone: TIMEZONE });
 
-    console.log(`Đã đặt lịch gửi TKB tự động (Có chặn Chủ Nhật & hỗ trợ lệnh jt2 - jt7).`);
+    console.log(`Đã đặt lịch gửi TKB tự động (Có chặn Chủ Nhật & chỉ phản hồi lệnh qua DM).`);
 }
 
 client.login(DISCORD_TOKEN);
