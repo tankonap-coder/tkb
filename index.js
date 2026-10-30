@@ -15,7 +15,7 @@ try {
 // ==========================================
 // 1. CƠ CHẾ CHỐNG NGỦ (KEEP-ALIVE CHO RENDER)
 // ==========================================
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 8080;
 
 http.createServer((req, res) => {
     if (req.url === '/health' || req.url === '/') {
@@ -85,6 +85,7 @@ const TEN_THU_VI = {
 };
 
 const USER_TAG = "<@1188753053898260531>";
+const MY_USER_ID = "1188753053898260531"; // ID tài khoản của bạn để xác thực DM
 
 function saveTkb(data) {
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 4), 'utf-8');
@@ -205,14 +206,17 @@ client.once('ready', () => {
     setupCronJobs();
 });
 
-// Xử lý tin nhắn (CHỈ NHẬN TRONG TIN NHẮN RIÊNG - DM)
+// Xử lý tin nhắn (CHỈ NHẬN TRONG DM VÀ CHỈ TỪ ID CỦA BẠN)
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
 
-    // Chặn tất cả tin nhắn xuất phát từ server chung, chỉ cho phép DM
+    // 1. Chặn tất cả tin nhắn từ server công khai
     if (message.guild) return;
 
-    // 1. NẾU GỬI ẢNH TRONG DM: Phân tích bằng AI và lưu trữ
+    // 2. Chặn tất cả tin nhắn DM từ người khác (Chỉ cho phép tài khoản của bạn tương tác)
+    if (message.author.id !== MY_USER_ID) return;
+
+    // 3. NẾU GỬI ẢNH TRONG DM: Phân tích bằng AI và lưu trữ
     if (message.attachments.size > 0) {
         const attachment = message.attachments.first();
         const isImage = attachment.contentType?.startsWith('image/');
@@ -233,7 +237,7 @@ client.on('messageCreate', async (message) => {
         return;
     }
 
-    // 2. NẾU GỬI LỆNH TRONG DM (jt2, jt3, jt4, jt5, jt6, jt7)
+    // 4. NẾU GỬI LỆNH TRONG DM (jt2, jt3, jt4, jt5, jt6, jt7)
     const content = message.content.trim().toLowerCase();
     const mapCmdToDay = {
         "jt2": { key: "Monday", name: "Thứ 2" },
@@ -301,7 +305,7 @@ function setupCronJobs() {
         }
     }, { timezone: TIMEZONE });
 
-    console.log(`Đã đặt lịch gửi TKB tự động (Có chặn Chủ Nhật & chỉ phản hồi lệnh qua DM).`);
+    console.log(`Đã đặt lịch gửi TKB tự động (Chỉ phản hồi DM của đúng chủ nhân ID).`);
 }
 
 client.login(DISCORD_TOKEN);
