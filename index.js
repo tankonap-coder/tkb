@@ -15,7 +15,7 @@ try {
 // ==========================================
 // 1. CƠ CHẾ CHỐNG NGỦ (KEEP-ALIVE CHO RENDER)
 // ==========================================
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 http.createServer((req, res) => {
     if (req.url === '/health' || req.url === '/') {
@@ -185,8 +185,7 @@ async function analyzeTkbWithAI(imageUrl) {
         ]
     });
 
-    const cleanText = aiResponse.text.replace(/
-```json/g, '').replace(/```/g, '').trim();
+    const cleanText = aiResponse.text.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(cleanText);
 }
 
